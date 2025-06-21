@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "dotenv": "^16.5.0",
     "drizzle-orm": "^0.44.2",
     "next": "15.3.4",
     "react": "^19.0.0",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@libsql/client": "^0.15.9",
     "@tailwindcss/postcss": "^4",
     "@types/bun": "^1.2.16",
     "@types/node": "^20",
