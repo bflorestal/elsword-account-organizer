@@ -34,7 +34,7 @@ export const characters = createTable("characters", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   accountId: integer("account_id")
     .notNull()
-    .references(() => accounts.id),
+    .references(() => accounts.id, { onDelete: "cascade" }),
   classId: integer("class_id")
     .notNull()
     .references(() => classes.id),
