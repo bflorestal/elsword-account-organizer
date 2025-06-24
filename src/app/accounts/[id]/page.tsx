@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SteamIcon } from "~/components/steam-icon";
 import { getAccountById } from "~/db/queries";
@@ -52,8 +53,13 @@ export default async function AccountPage({
                     />
                   )}
                 </div>
-                <span className="font-semibold">{char.username}</span> - Niveau{" "}
-                {char.level}
+                <Link
+                  href={`/characters/${char.id}`}
+                  className="hover:underline"
+                >
+                  <h3 className="font-semibold">{char.username}</h3>
+                </Link>{" "}
+                - Niveau {char.level}
               </li>
             ))
           ) : (

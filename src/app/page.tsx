@@ -51,7 +51,12 @@ async function AccountsList() {
                     width={40}
                     height={40}
                   />
-                  <span className="font-semibold">{char.username}</span>
+                  <Link
+                    href={`/characters/${char.id}`}
+                    className="hover:underline"
+                  >
+                    <h3 className="font-semibold">{char.username}</h3>
+                  </Link>
                 </div>
               ))
             ) : (
