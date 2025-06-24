@@ -3,6 +3,12 @@ import { eq } from "drizzle-orm";
 import { db } from ".";
 import { accounts, characters, servers } from "./schema";
 
+const fullCharacterFields: Record<string, boolean> = {
+  class: true,
+  specialization: true,
+  pvpRank: true,
+};
+
 export async function getServerByName(name: string) {
   const server = await db.query.servers.findFirst({
     where: eq(servers.name, name),
@@ -18,11 +24,7 @@ export async function getAllAccounts() {
     with: {
       server: true,
       characters: {
-        with: {
-          class: true,
-          specialization: true,
-          pvpRank: true,
-        },
+        with: fullCharacterFields,
       },
     },
   });
@@ -56,7 +58,10 @@ export async function getAccountById(accountId: number) {
   const account = await db.query.accounts.findFirst({
     where: eq(accounts.id, accountId),
     with: {
-      characters: true,
+      server: true,
+      characters: {
+        with: fullCharacterFields,
+      },
     },
   });
 
@@ -100,6 +105,7 @@ export async function deleteAccount(accountId: number) {
 export async function getCharactersByAccountId(accountId: number) {
   const chars = await db.query.characters.findMany({
     where: eq(characters.accountId, accountId),
+    with: fullCharacterFields,
   });
 
   return chars;
@@ -121,6 +127,7 @@ export async function createCharacter(data: typeof characters.$inferInsert) {
 export async function getCharacterById(characterId: number) {
   const character = await db.query.characters.findFirst({
     where: eq(characters.id, characterId),
+    with: fullCharacterFields,
   });
 
   if (!character) throw new Error(`Character with ID ${characterId} not found`);
