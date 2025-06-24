@@ -19,7 +19,7 @@ export const accounts = createTable("accounts", {
     .references(() => servers.id),
   username: text("username").notNull(),
   isSteam: integer("is_steam", { mode: "boolean" }).default(false),
-  resonanceLevel: integer("resonanceLevel").default(0),
+  resonanceLevel: integer("resonance_level").default(0),
 });
 
 export const accountsRelations = relations(accounts, ({ one, many }) => ({
