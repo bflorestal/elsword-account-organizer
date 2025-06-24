@@ -1,5 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Suspense } from "react";
+import { SteamIcon } from "~/components/steam-icon";
 import { getAllAccounts } from "~/db/queries";
 
 export default function Home() {
@@ -27,10 +29,16 @@ async function AccountsList() {
     <ul className="flex flex-col gap-4">
       {accountsList.map((acc) => (
         <li key={acc.id}>
-          <h2 className="text-xl font-bold">
-            {acc.username}{" "}
-            <span className="font-normal">({acc.server.name})</span>
-          </h2>
+          <div className="flex items-center space-x-1">
+            {acc.isSteam && <SteamIcon className="w-4 h-4 fill-white" />}
+            <h2 className="text-xl font-bold">
+              <Link href={`/accounts/${acc.id}`} className="hover:underline">
+                {acc.username}
+              </Link>{" "}
+              <span className="font-normal">({acc.server.name})</span>{" "}
+              <span className="text-blue-400">{acc.resonanceLevel}</span>
+            </h2>
+          </div>
 
           <div className="flex flex-col gap-2 p-4 border rounded-lg w-full sm:w-[400px]">
             {acc.characters.length > 0 ? (
