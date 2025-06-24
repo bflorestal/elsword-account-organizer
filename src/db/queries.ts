@@ -17,7 +17,13 @@ export async function getAllAccounts() {
   return await db.query.accounts.findMany({
     with: {
       server: true,
-      characters: true,
+      characters: {
+        with: {
+          class: true,
+          specialization: true,
+          pvpRank: true,
+        },
+      },
     },
   });
 }
