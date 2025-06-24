@@ -61,6 +61,10 @@ export const charactersRelations = relations(characters, ({ one }) => ({
     fields: [characters.specializationId],
     references: [specializations.id],
   }),
+  pvpRank: one(pvpRanks, {
+    fields: [characters.pvpRankId],
+    references: [pvpRanks.id],
+  }),
 }));
 
 export const classes = createTable("classes", {
