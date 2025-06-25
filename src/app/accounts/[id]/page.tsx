@@ -63,7 +63,7 @@ export default async function AccountPage({
               </li>
             ))
           ) : (
-            <p className="text-gray-500">No characters found</p>
+            <p className="text-gray-500">Aucun personnage trouvé</p>
           )}
         </ul>
       </main>
