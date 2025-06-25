@@ -54,7 +54,7 @@ export default async function AccountPage({
                   )}
                 </div>
                 <Link
-                  href={`/characters/${char.id}`}
+                  href={`/character/${char.id}`}
                   className="hover:underline"
                 >
                   <h3 className="font-semibold">{char.username}</h3>

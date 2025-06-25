@@ -32,7 +32,7 @@ async function AccountsList() {
           <div className="flex items-center space-x-1">
             {acc.isSteam && <SteamIcon className="w-4 h-4 fill-white" />}
             <h2 className="text-xl font-bold">
-              <Link href={`/accounts/${acc.id}`} className="hover:underline">
+              <Link href={`/account/${acc.id}`} className="hover:underline">
                 {acc.username}
               </Link>{" "}
               <span className="font-normal">({acc.server.name})</span>{" "}
@@ -52,7 +52,7 @@ async function AccountsList() {
                     height={40}
                   />
                   <Link
-                    href={`/characters/${char.id}`}
+                    href={`/character/${char.id}`}
                     className="hover:underline"
                   >
                     <h3 className="font-semibold">{char.username}</h3>
