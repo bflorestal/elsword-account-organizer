@@ -6,8 +6,8 @@ import { getAllAccounts } from "~/db/queries";
 
 export default function Home() {
   return (
-    <div>
-      <h1>Liste de comptes</h1>
+    <div className="space-y-8">
+      <h1 className="text-3xl sm:text-4xl font-bold">Liste de comptes</h1>
 
       <Suspense
         fallback={<div className="min-h-80 min-w-96">Loading accounts...</div>}
