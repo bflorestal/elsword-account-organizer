@@ -15,6 +15,13 @@
       "when": 1752615725262,
       "tag": "0001_ordinary_fantastic_four",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1752948463488,
+      "tag": "0002_eminent_nico_minoru",
+      "breakpoints": true
     }
   ]
 }

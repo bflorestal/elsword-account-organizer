@@ -5,7 +5,7 @@ export const createTable = sqliteTableCreator((name) => `elstracker_${name}`);
 
 export const servers = createTable("servers", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  name: text("name").notNull(),
+  name: text("name").notNull().unique(),
 });
 
 export const serversRelations = relations(servers, ({ many }) => ({
@@ -69,7 +69,7 @@ export const charactersRelations = relations(characters, ({ one }) => ({
 
 export const classes = createTable("classes", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  name: text("name").notNull(),
+  name: text("name").notNull().unique(),
   iconUrl: text("icon_url").notNull(),
 });
 
@@ -83,7 +83,7 @@ export const specializations = createTable("specializations", {
   classId: integer("class_id")
     .notNull()
     .references(() => classes.id),
-  name: text("name").notNull(),
+  name: text("name").notNull().unique(),
   iconUrl: text("icon_url").notNull(),
 });
 
@@ -113,7 +113,7 @@ export const pvpRanksEnum = [
 
 export const pvpRanks = createTable("pvp_ranks", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  name: text("name", { enum: pvpRanksEnum }).notNull(),
+  name: text("name", { enum: pvpRanksEnum }).notNull().unique(),
   iconUrl: text("icon_url"),
 });
 
