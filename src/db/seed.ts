@@ -1,22 +1,21 @@
-import puppeteer from "puppeteer";
+import puppeteer, { Page, type Browser } from "puppeteer";
 import { db } from ".";
 import { classes, pvpRanks, servers, specializations } from "./schema";
 import { eq } from "drizzle-orm";
 
-type Specs = Omit<typeof specializations.$inferInsert, "classId">;
+type Specs = Omit<typeof specializations.$inferInsert, "id" | "classId">;
+type ClassInsert = Omit<typeof classes.$inferInsert, "id"> & {
+  specializations: Specs[];
+};
 
-/**
- * Scrapes character classes and specializations from ElWiki and inserts them into the database.
- * This function uses Puppeteer to navigate to the ElWiki character page,
- * extracts character names, images, and their specializations,
- * and inserts them into the database.
- */
-async function scrape() {
+async function initBrowser() {
   const browser = await puppeteer.launch();
-
   const page = await browser.newPage();
   await page.goto("https://elwiki.net");
+  return { browser, page };
+}
 
+async function extractCharacters(page: Page) {
   await page.waitForSelector(".char-banner-tree");
 
   const characters = await page.evaluate(() => {
@@ -68,141 +67,122 @@ async function scrape() {
     return result;
   });
 
-  await browser.close();
+  return characters;
+}
 
-  console.log("Inserting scraped data into database...");
+/**
+ * Scrapes character classes and specializations from ElWiki and inserts them into the database.
+ */
+async function saveClassWithSpecs(character: ClassInsert) {
+  if (!character.name) return;
 
-  for (const character of characters) {
-    if (!character.name) continue;
+  await db.transaction(async (tx) => {
+    const [insertedClass] = await tx
+      .insert(classes)
+      .values({ name: character.name, iconUrl: character.iconUrl || "" })
+      .onConflictDoNothing({ target: classes.name })
+      .returning({ id: classes.id });
 
-    const [existingClass] = await db
-      .select()
-      .from(classes)
-      .where(eq(classes.name, character.name));
+    const classId =
+      insertedClass?.id ??
+      (
+        await tx.select().from(classes).where(eq(classes.name, character.name))
+      )[0].id;
 
-    let classId: number;
-
-    if (existingClass) {
-      classId = existingClass.id;
-      console.log(
-        `Class "${character.name}" already exists with ID ${classId}`
-      );
-    } else {
-      const [newClass] = await db
-        .insert(classes)
-        .values({
-          name: character.name,
-          iconUrl: character.iconUrl || "",
-        })
-        .onConflictDoNothing({ target: classes.name })
-        .returning({ id: classes.id });
-
-      console.log(
-        `Inserted new class "${character.name}" with ID ${newClass.id}`
-      );
-      classId = newClass.id;
-    }
-
-    for (const spec of character.specializations) {
-      const [newSpec] = await db
-        .insert(specializations)
-        .values({
-          classId,
-          name: spec.name,
-          iconUrl: spec.iconUrl || "",
-        })
-        .onConflictDoNothing({ target: specializations.name })
-        .returning({ id: specializations.id });
-
-      console.log(
-        `Specialization "${spec.name}" (${character.name}) ${
-          newSpec?.id
-            ? `inserted with ID ${newSpec.id}`
-            : "already exists, skipping."
-        }`
-      );
-    }
-  }
-
-  console.log("Database insertion completed!");
+    const specsToInsert = character.specializations.map((spec) => ({
+      classId,
+      name: spec.name,
+      iconUrl: spec.iconUrl,
+    }));
+    await tx
+      .insert(specializations)
+      .values(specsToInsert)
+      .onConflictDoNothing({ target: specializations.name });
+    console.log(`Processed class "${character.name}" with ID ${classId}`);
+  });
 }
 
 /**
  * Seeds the database with initial server and PvP rank data.
- * This function inserts predefined server names and PvP ranks into the database,
- * ensuring that duplicates are not created.
  */
-async function seedServersAndRanks() {
-  console.log("Inserting servers and PvP ranks into database...");
+async function seedStaticData() {
+  await db.transaction(async (tx) => {
+    await tx
+      .insert(servers)
+      .values([
+        { name: "Europe" },
+        { name: "North America" },
+        { name: "Korea" },
+      ])
+      .onConflictDoNothing({ target: servers.name });
 
-  const newServers = await db
-    .insert(servers)
-    .values([{ name: "Europe" }, { name: "North America" }, { name: "Korea" }])
-    .onConflictDoNothing({ target: servers.name })
-    .returning();
-
-  console.log(
-    "Inserted servers:",
-    newServers.map((server) => server.name)
-  );
-
-  const newPvPRanks = await db
-    .insert(pvpRanks)
-    .values([
-      { name: "Unranked" },
-      {
-        name: "E",
-        iconUrl: "https://elwiki.net/wiki/images/7/76/RankE3.png",
-      },
-      {
-        name: "D",
-        iconUrl: "https://elwiki.net/wiki/images/c/c2/RankD3.png",
-      },
-      {
-        name: "C",
-        iconUrl: "https://elwiki.net/wiki/images/2/29/RankC3.png",
-      },
-      {
-        name: "B",
-        iconUrl: "https://elwiki.net/wiki/images/a/ab/RankB3.png",
-      },
-      {
-        name: "A",
-        iconUrl: "https://elwiki.net/wiki/images/5/56/RankA3.png",
-      },
-      {
-        name: "S",
-        iconUrl: "https://elwiki.net/wiki/images/b/b9/RankS3.png",
-      },
-      {
-        name: "SS",
-        iconUrl: "https://elwiki.net/wiki/images/a/aa/RankSS3.png",
-      },
-      {
-        name: "SSS",
-        iconUrl: "https://elwiki.net/wiki/images/5/5d/RankSSS3.png",
-      },
-      {
-        name: "Star",
-        iconUrl: "https://elwiki.net/wiki/images/7/7b/RankStar3.png",
-      },
-    ])
-    .onConflictDoNothing({ target: pvpRanks.name })
-    .returning();
-
-  console.log(
-    "Inserted PvP ranks:",
-    newPvPRanks.map((rank) => rank.name)
-  );
-
-  console.log("Database seeding completed!");
+    await tx
+      .insert(pvpRanks)
+      .values([
+        { name: "Unranked" },
+        {
+          name: "E",
+          iconUrl: "https://elwiki.net/wiki/images/7/76/RankE3.png",
+        },
+        {
+          name: "D",
+          iconUrl: "https://elwiki.net/wiki/images/c/c2/RankD3.png",
+        },
+        {
+          name: "C",
+          iconUrl: "https://elwiki.net/wiki/images/2/29/RankC3.png",
+        },
+        {
+          name: "B",
+          iconUrl: "https://elwiki.net/wiki/images/a/ab/RankB3.png",
+        },
+        {
+          name: "A",
+          iconUrl: "https://elwiki.net/wiki/images/5/56/RankA3.png",
+        },
+        {
+          name: "S",
+          iconUrl: "https://elwiki.net/wiki/images/b/b9/RankS3.png",
+        },
+        {
+          name: "SS",
+          iconUrl: "https://elwiki.net/wiki/images/a/aa/RankSS3.png",
+        },
+        {
+          name: "SSS",
+          iconUrl: "https://elwiki.net/wiki/images/5/5d/RankSSS3.png",
+        },
+        {
+          name: "Star",
+          iconUrl: "https://elwiki.net/wiki/images/7/7b/RankStar3.png",
+        },
+      ])
+      .onConflictDoNothing({ target: pvpRanks.name });
+  });
 }
 
-(async () => {
+async function main() {
+  let browser: Browser | null = null;
   try {
-    await scrape();
-    await seedServersAndRanks();
-  } catch (error) {
-    console.error("Error during database population:", error);
+    const { browser: b, page } = await initBrowser();
+    browser = b;
+
+    const characters = await extractCharacters(page);
+    console.log(`Trouvé ${characters.length} classes.`);
+
+    // Insertion séquentielle
+    for (const char of characters) {
+      await saveClassWithSpecs(char);
+    }
+    console.log("Insertion des classes et spécialisations terminée.");
+
+    await seedStaticData();
+    console.log("Seed serveurs & PvP ranks terminé.");
+  } catch (err) {
+    console.error("Erreur pendant l’exécution :", err);
+  } finally {
+    if (browser) await browser.close();
   }
-})();
+}
+
+main();
