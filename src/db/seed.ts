@@ -168,18 +168,18 @@ async function main() {
     browser = b;
 
     const characters = await extractCharacters(page);
-    console.log(`Trouvé ${characters.length} classes.`);
+    console.log(`Found ${characters.length} classes.`);
 
-    // Insertion séquentielle
+    // Sequential insertion
     for (const char of characters) {
       await saveClassWithSpecs(char);
     }
-    console.log("Insertion des classes et spécialisations terminée.");
+    console.log("Classes and specializations saved successfully.");
 
     await seedStaticData();
-    console.log("Seed serveurs & PvP ranks terminé.");
+    console.log("Servers & PvP ranks saved successfully.");
   } catch (err) {
-    console.error("Erreur pendant l’exécution :", err);
+    console.error("Error during execution:", err);
   } finally {
     if (browser) await browser.close();
   }
