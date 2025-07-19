@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getCharacterById } from "~/db/queries";
+import { getCharacterById } from "~/server/db/queries";
 
 export default async function CharacterPage({
   params,

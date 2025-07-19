@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SteamIcon } from "~/components/steam-icon";
-import { getAccountById } from "~/db/queries";
+import { getAccountById } from "~/server/db/queries";
 
 export default async function AccountPage({
   params,

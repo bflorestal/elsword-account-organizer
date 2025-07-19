@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { SteamIcon } from "~/components/steam-icon";
-import { getAllAccounts } from "~/db/queries";
+import { getAllAccounts } from "~/server/db/queries";
 
 export default function Home() {
   return (
