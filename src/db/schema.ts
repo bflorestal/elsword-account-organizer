@@ -16,7 +16,7 @@ export const accounts = createTable("accounts", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   serverId: integer("server_id")
     .notNull()
-    .references(() => servers.id),
+    .references(() => servers.id, { onDelete: "cascade" }),
   username: text("username").notNull(),
   isSteam: integer("is_steam", { mode: "boolean" }).default(false),
   resonanceLevel: integer("resonance_level").default(0),
@@ -37,15 +37,16 @@ export const characters = createTable("characters", {
     .references(() => accounts.id, { onDelete: "cascade" }),
   classId: integer("class_id")
     .notNull()
-    .references(() => classes.id),
+    .references(() => classes.id, { onDelete: "cascade" }),
   username: text("name").notNull(),
   level: integer("level").default(1),
   specializationId: integer("specialization_id").references(
-    () => specializations.id
+    () => specializations.id,
+    { onDelete: "set null" }
   ),
-  pvpRankId: integer("pvp_rank_id")
-    .notNull()
-    .references(() => pvpRanks.id),
+  pvpRankId: integer("pvp_rank_id").references(() => pvpRanks.id, {
+    onDelete: "set null",
+  }),
 });
 
 export const charactersRelations = relations(characters, ({ one }) => ({
@@ -82,7 +83,7 @@ export const specializations = createTable("specializations", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   classId: integer("class_id")
     .notNull()
-    .references(() => classes.id),
+    .references(() => classes.id, { onDelete: "cascade" }),
   name: text("name").notNull().unique(),
   iconUrl: text("icon_url").notNull(),
 });
