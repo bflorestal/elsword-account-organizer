@@ -9,6 +9,10 @@ const fullCharacterFields: Record<string, boolean> = {
   pvpRank: true,
 };
 
+export async function getAllServers() {
+  return await db.query.servers.findMany();
+}
+
 export async function getServerByName(name: string) {
   const server = await db.query.servers.findFirst({
     where: eq(servers.name, name),
