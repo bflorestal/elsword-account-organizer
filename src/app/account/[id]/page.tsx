@@ -1,13 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { Plus, Server, Trophy, Users } from "lucide-react";
 
 import { SteamIcon } from "~/components/steam-icon";
 import { Badge } from "~/components/ui/badge";
 import { Separator } from "~/components/ui/separator";
-import { getAccountById } from "~/server/db/queries";
+import {
+  getAccountById,
+  getAllAccounts,
+  getAllClasses,
+  getAllPvPRanks,
+  getAllSpecializations,
+} from "~/server/db/queries";
 import { Button } from "~/components/ui/button";
+import { NewCharacterForm } from "./new-character-form";
 
 export default async function AccountPage({
   params,
@@ -65,11 +73,17 @@ export default async function AccountPage({
               {account.characters.length}
             </Badge>
           </div>
-          <Button variant="ghost" className="cursor-pointer">
-            <Plus className="mr-2 h-4 w-4" />
-            Créer un personnage
-          </Button>
+          <Suspense
+            fallback={
+              <Button disabled variant="ghost">
+                <Plus className="mr-2 h-4 w-4" /> Créer un personnage
+              </Button>
+            }
+          >
+            <NewCharacterButton />
+          </Suspense>
         </div>
+
         <ul className="flex flex-col gap-4">
           {account.characters.length > 0 ? (
             account.characters.map((char) => (
@@ -107,5 +121,21 @@ export default async function AccountPage({
         </ul>
       </div>
     </div>
+  );
+}
+
+async function NewCharacterButton() {
+  const existingAccounts = await getAllAccounts();
+  const existingClasses = await getAllClasses();
+  const existingSpecializations = await getAllSpecializations();
+  const existingPvPRanks = await getAllPvPRanks();
+
+  return (
+    <NewCharacterForm
+      existingAccounts={existingAccounts}
+      existingClasses={existingClasses}
+      existingSpecializations={existingSpecializations}
+      existingPvPRanks={existingPvPRanks}
+    />
   );
 }
