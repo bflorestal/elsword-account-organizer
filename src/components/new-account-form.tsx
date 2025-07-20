@@ -34,6 +34,7 @@ import {
 
 import { servers } from "~/server/db/schema";
 import { createAccountAction } from "~/server/actions/createAccount";
+import { toast } from "sonner";
 
 const accountFormSchema = z.object({
   username: z
@@ -83,14 +84,17 @@ export function NewAccountForm({
       });
 
       if (result.success) {
-        console.log("Account created successfully:", result.data);
+        toast.success("Compte créé avec succès !");
         form.reset();
         setIsOpen(false);
       } else {
-        console.error("Error creating account:", result.error);
+        toast.error("Erreur lors de la création du compte.", {
+          description: result.error?.message || "Veuillez réessayer.",
+        });
       }
     } catch (error) {
-      console.error("An unexpected error occurred:", error);
+      toast.error("Une erreur inattendue s'est produite.");
+      console.error(error);
     } finally {
       setIsLoading(false);
     }

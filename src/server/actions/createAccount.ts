@@ -17,6 +17,12 @@ export async function createAccountAction(data: typeof accounts.$inferInsert) {
     return { success: true, data: newAccount };
   } catch (error) {
     console.error(error);
-    return { success: false, error };
+    return {
+      success: false,
+      error: {
+        message:
+          error instanceof Error ? error.message : "An unknown error occurred",
+      },
+    };
   }
 }
