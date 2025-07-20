@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "~/components/theme-provider";
 import Header from "~/components/header";
 import Sidebar from "~/components/sidebar";
 
@@ -25,15 +26,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`bg-background ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        <div className="grid min-h-svh grid-cols-[auto_1fr]">
-          <Sidebar />
-          <main className="p-8">{children}</main>
-        </div>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Header />
+          <div className="grid min-h-svh grid-cols-[auto_1fr]">
+            <Sidebar />
+            <main className="p-8">{children}</main>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

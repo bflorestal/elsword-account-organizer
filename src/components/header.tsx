@@ -1,5 +1,7 @@
 import { House } from "lucide-react";
 import Link from "next/link";
+import { ModeToggle } from "~/components/mode-toggle";
+
 export default function Header() {
   return (
     <header className="sticky w-full z-50 top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/40 p-4 items-center lg:hidden">
@@ -8,6 +10,7 @@ export default function Header() {
           <span className="sr-only">Home</span>
           <House className="w-6 h-6" />
         </Link>
+        <ModeToggle />
       </div>
     </header>
   );
