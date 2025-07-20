@@ -1,5 +1,5 @@
 import "server-only";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from ".";
 import { accounts, characters, servers } from "./schema";
 
@@ -47,7 +47,10 @@ export async function getAccountsByServerId(serverId: number) {
 
 export async function createAccount(data: typeof accounts.$inferInsert) {
   const existingAccount = await db.query.accounts.findFirst({
-    where: eq(accounts.username, data.username),
+    where: and(
+      eq(accounts.username, data.username),
+      eq(accounts.serverId, data.serverId)
+    ),
   });
 
   if (existingAccount)
