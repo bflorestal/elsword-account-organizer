@@ -21,6 +21,10 @@ export default function Home() {
 async function AccountsList() {
   const accountsList = await getAllAccounts();
 
+  if (!accountsList || accountsList.length === 0) {
+    return <p className="text-gray-500">Aucun compte trouvé.</p>;
+  }
+
   return (
     <ul className="flex flex-col gap-4">
       {accountsList.map((acc) => (
