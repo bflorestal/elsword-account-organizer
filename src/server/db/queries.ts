@@ -1,7 +1,7 @@
 import "server-only";
 import { and, eq } from "drizzle-orm";
 import { db } from ".";
-import { accounts, characters, servers } from "./schema";
+import { accounts, characters, servers, specializations } from "./schema";
 
 const fullCharacterFields: Record<string, boolean> = {
   class: true,
@@ -172,4 +172,26 @@ export async function deleteCharacterById(characterId: number) {
     .delete(characters)
     .where(eq(characters.id, characterId))
     .returning();
+}
+
+export async function getAllClasses() {
+  return await db.query.classes.findMany();
+}
+
+export async function getAllSpecializations() {
+  return await db.query.specializations.findMany({
+    with: {
+      class: true,
+    },
+  });
+}
+
+export async function getSpecializationsByClassId(classId: number) {
+  return await db.query.specializations.findMany({
+    where: eq(specializations.classId, classId),
+  });
+}
+
+export async function getAllPvPRanks() {
+  return await db.query.pvpRanks.findMany();
 }
