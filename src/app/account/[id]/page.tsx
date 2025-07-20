@@ -20,10 +20,10 @@ export default async function AccountPage({
   const account = await getAccountById(parsedAccountId);
 
   return (
-    <div className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-      <div className="flex items-center space-x-1">
-        {account.isSteam && <SteamIcon className="w-4 h-4 fill-white" />}
-        <h1 className="text-2xl font-bold">{account.username}</h1>
+    <div className="flex flex-col gap-[32px] row-start-2">
+      <div className="flex items-baseline space-x-1">
+        {account.isSteam && <SteamIcon className="w-6 h-6 fill-white" />}
+        <h1 className="text-3xl sm:text-4xl font-bold">{account.username}</h1>
       </div>
       <h2 className="text-lg font-semibold">Serveur : {account.server.name}</h2>
       <p>Rang de résonance d&apos;Eldrit : {account.resonanceLevel}</p>
