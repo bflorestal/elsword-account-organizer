@@ -1,5 +1,12 @@
 import { House } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
+
+import { Separator } from "~/components/ui/separator";
+import { Button } from "~/components/ui/button";
+import { NewAccountForm } from "~/components/new-account-form";
+
+import { getAllServers } from "~/server/db/queries";
 
 export default function Sidebar() {
   return (
@@ -13,7 +20,25 @@ export default function Sidebar() {
           <House className="w-6 h-6" />
           <span>Home</span>
         </Link>
+
+        <Separator className="my-4" />
+
+        <Suspense
+          fallback={
+            <Button disabled className="w-full">
+              Ajouter un compte
+            </Button>
+          }
+        >
+          <NewAccountButton />
+        </Suspense>
       </div>
     </aside>
   );
+}
+
+async function NewAccountButton() {
+  const existingServers = await getAllServers();
+
+  return <NewAccountForm existingServers={existingServers} />;
 }
