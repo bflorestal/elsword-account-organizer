@@ -35,6 +35,7 @@ import {
 import { servers } from "~/server/db/schema";
 import { createAccountAction } from "~/server/actions/createAccount";
 import { toast } from "sonner";
+import { Plus } from "lucide-react";
 
 const accountFormSchema = z.object({
   username: z
@@ -74,7 +75,6 @@ export function NewAccountForm({
 
   async function onSubmit(data: AccountFormData) {
     setIsLoading(true);
-    console.dir(data);
 
     try {
       const result = await createAccountAction({
@@ -103,8 +103,8 @@ export function NewAccountForm({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full cursor-pointer">
-          Ajouter un compte
+        <Button variant="ghost" className="w-full justify-start cursor-pointer">
+          <Plus className="mr-2 h-4 w-4" /> Ajouter un compte
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
