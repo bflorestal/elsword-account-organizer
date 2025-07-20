@@ -40,7 +40,7 @@ export default async function AccountPage({
                   width={40}
                   height={40}
                 />
-                {char.pvpRank.iconUrl && (
+                {char.pvpRank?.iconUrl && (
                   <Image
                     src={char.pvpRank.iconUrl}
                     alt={char.pvpRank.name}
