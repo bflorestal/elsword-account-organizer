@@ -18,9 +18,9 @@ export default async function CharacterPage({
   const character = await getCharacterById(parsedCharacterId);
 
   return (
-    <div className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+    <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center space-x-1">
-        <h1 className="text-2xl font-bold">{character.username}</h1>
+        <h1 className="text-3xl font-bold">{character.username}</h1>
       </div>
 
       <SpecializationDisplay
