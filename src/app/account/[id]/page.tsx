@@ -59,7 +59,7 @@ export default async function AccountPage({
                 <div className="flex items-center space-x-1">
                   <Trophy className="h-4 w-4" />
                   <span>
-                    Rang de résonance d&apos;Eldrit : {account.resonanceLevel}
+                    Niveau de résonance d&apos;Eldrit : {account.resonanceLevel}
                   </span>
                 </div>
               </div>
