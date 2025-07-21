@@ -35,17 +35,17 @@ export default async function AccountPage({
   const account = await getAccountById(parsedAccountId);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="md:max-w-4xl mx-auto space-y-6">
       <div>
-        <div className="flex items-center justify-between flex-col sm:flex-row">
-          <div className="flex items-center space-x-4 flex-col sm:flex-row">
+        <div className="flex items-center justify-between flex-col sm:flex-row gap-y-4">
+          <div className="flex items-center sm:space-x-4 flex-col sm:flex-row">
             <div className="w-12 h-12 bg-foreground rounded-full flex items-center justify-center">
               <span className="text-xl text-background font-bold">
                 {account.username.charAt(0)}
               </span>
             </div>
             <div>
-              <div className="flex items-center space-x-1">
+              <div className="flex items-center space-x-1 justify-center sm:justify-normal">
                 {account.isSteam && (
                   <SteamIcon className="w-6 h-6 fill-white" />
                 )}

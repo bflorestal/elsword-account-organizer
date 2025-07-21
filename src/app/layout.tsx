@@ -41,7 +41,9 @@ export default function RootLayout({
           <Header />
           <div className="grid min-h-svh sm:grid-cols-1 md:grid-cols-[auto_1fr]">
             <Sidebar />
-            <main className="p-8 max-w-7xl mx-auto w-full">{children}</main>
+            <main className="p-4 md:p-8 md:max-w-7xl mx-auto w-full">
+              {children}
+            </main>
           </div>
           <Toaster richColors />
         </ThemeProvider>
