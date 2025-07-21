@@ -172,6 +172,7 @@ export function NewAccountForm({
                       {...field}
                       type="number"
                       min={0}
+                      max={999}
                       placeholder="Entrez le niveau de résonance"
                     />
                   </FormControl>

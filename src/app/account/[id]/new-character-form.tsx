@@ -227,6 +227,7 @@ export function NewCharacterForm({
                       {...field}
                       type="number"
                       min={1}
+                      max={99}
                       placeholder="Niveau du personnage"
                     />
                   </FormControl>
