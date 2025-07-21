@@ -17,6 +17,8 @@ import {
 import { Button } from "~/components/ui/button";
 import { NewCharacterForm } from "./new-character-form";
 
+import { DeleteAccountButton } from "./delete-account-button";
+
 export default async function AccountPage({
   params,
 }: {
@@ -35,30 +37,38 @@ export default async function AccountPage({
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
-        <div className="flex items-center space-x-4 sm:flex-col md:flex-row">
-          <div className="w-12 h-12 bg-foreground rounded-full flex items-center justify-center">
-            <span className="text-xl text-background font-bold">
-              {account.username.charAt(0)}
-            </span>
-          </div>
-          <div>
-            <div className="flex items-center space-x-1">
-              {account.isSteam && <SteamIcon className="w-6 h-6 fill-white" />}
-              <h1 className="text-3xl font-bold">{account.username}</h1>
+        <div className="flex items-center justify-between flex-col sm:flex-row">
+          <div className="flex items-center space-x-4 flex-col sm:flex-row">
+            <div className="w-12 h-12 bg-foreground rounded-full flex items-center justify-center">
+              <span className="text-xl text-background font-bold">
+                {account.username.charAt(0)}
+              </span>
             </div>
-            <div className="flex items-center space-x-4 mt-2 text-gray-400 sm:flex-col md:flex-row">
+            <div>
               <div className="flex items-center space-x-1">
-                <Server className="h-4 w-4" />
-                <span>Serveur : {account.server.name}</span>
+                {account.isSteam && (
+                  <SteamIcon className="w-6 h-6 fill-white" />
+                )}
+                <h1 className="text-3xl font-bold">{account.username}</h1>
               </div>
-              <div className="flex items-center space-x-1">
-                <Trophy className="h-4 w-4" />
-                <span>
-                  Rang de résonance d&apos;Eldrit : {account.resonanceLevel}
-                </span>
+              <div className="flex items-center space-x-4 mt-2 text-gray-400 flex-col sm:flex-row">
+                <div className="flex items-center space-x-1">
+                  <Server className="h-4 w-4" />
+                  <span>Serveur : {account.server.name}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Trophy className="h-4 w-4" />
+                  <span>
+                    Rang de résonance d&apos;Eldrit : {account.resonanceLevel}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
+          <DeleteAccountButton
+            accountId={parsedAccountId}
+            accountUsername={account.username}
+          />
         </div>
       </div>
 

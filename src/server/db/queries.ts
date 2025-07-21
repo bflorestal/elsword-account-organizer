@@ -96,7 +96,7 @@ export async function updateAccount(
   return updatedAccount;
 }
 
-export async function deleteAccount(accountId: number) {
+export async function deleteAccountById(accountId: number) {
   const account = await db.query.accounts.findFirst({
     where: eq(accounts.id, accountId),
   });
