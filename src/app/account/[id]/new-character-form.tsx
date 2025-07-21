@@ -65,6 +65,7 @@ const characterFormSchema = z.object({
 type CharacterFormData = z.infer<typeof characterFormSchema>;
 
 type NewCharacterFormProps = {
+  accountId?: number;
   existingAccounts: Array<typeof accounts.$inferSelect>;
   existingClasses: Array<typeof classes.$inferSelect>;
   existingSpecializations: Array<typeof specializations.$inferSelect>;
@@ -72,6 +73,7 @@ type NewCharacterFormProps = {
 };
 
 export function NewCharacterForm({
+  accountId,
   existingAccounts,
   existingClasses,
   existingSpecializations,
@@ -84,7 +86,7 @@ export function NewCharacterForm({
     resolver: zodResolver(characterFormSchema),
     defaultValues: {
       username: "",
-      accountId: "",
+      accountId: accountId ? accountId.toString() : "",
       classId: "",
       level: "1",
       specializationId: "",
@@ -165,35 +167,37 @@ export function NewCharacterForm({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="accountId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Compte</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Sélectionnez un compte" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {existingAccounts.map((account) => (
-                        <SelectItem
-                          key={account.id}
-                          value={account.id.toString()}
-                        >
-                          {account.username}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
+            {!accountId && (
+              <FormField
+                control={form.control}
+                name="accountId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Compte</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionnez un compte" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {existingAccounts.map((account) => (
+                          <SelectItem
+                            key={account.id}
+                            value={account.id.toString()}
+                          >
+                            {account.username}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            )}
             <FormField
               control={form.control}
               name="username"

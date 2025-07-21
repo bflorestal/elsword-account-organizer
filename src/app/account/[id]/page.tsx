@@ -80,7 +80,7 @@ export default async function AccountPage({
               </Button>
             }
           >
-            <NewCharacterButton />
+            <NewCharacterButton accountId={parsedAccountId} />
           </Suspense>
         </div>
 
@@ -124,7 +124,7 @@ export default async function AccountPage({
   );
 }
 
-async function NewCharacterButton() {
+async function NewCharacterButton({ accountId }: { accountId: number }) {
   const existingAccounts = await getAllAccounts();
   const existingClasses = await getAllClasses();
   const existingSpecializations = await getAllSpecializations();
@@ -132,6 +132,7 @@ async function NewCharacterButton() {
 
   return (
     <NewCharacterForm
+      accountId={accountId}
       existingAccounts={existingAccounts}
       existingClasses={existingClasses}
       existingSpecializations={existingSpecializations}
