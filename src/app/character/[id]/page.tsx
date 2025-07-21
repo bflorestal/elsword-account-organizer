@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getCharacterById } from "~/server/db/queries";
+import { DeleteCharacterButton } from "./delete-character-button";
 
 export default async function CharacterPage({
   params,
@@ -19,8 +20,14 @@ export default async function CharacterPage({
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center space-x-1">
-        <h1 className="text-3xl font-bold">{character.username}</h1>
+      <div className="flex items-center justify-between flex-col sm:flex-row">
+        <div className="flex items-center space-x-1">
+          <h1 className="text-3xl font-bold">{character.username}</h1>
+        </div>
+        <DeleteCharacterButton
+          characterId={parsedCharacterId}
+          accountId={character.accountId}
+        />
       </div>
 
       <SpecializationDisplay

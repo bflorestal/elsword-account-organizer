@@ -168,10 +168,12 @@ export async function deleteCharacterById(characterId: number) {
 
   if (!character) throw new Error(`Character with ID ${characterId} not found`);
 
-  return await db
-    .delete(characters)
-    .where(eq(characters.id, characterId))
-    .returning();
+  return (
+    await db
+      .delete(characters)
+      .where(eq(characters.id, characterId))
+      .returning()
+  )[0];
 }
 
 export async function getAllClasses() {
