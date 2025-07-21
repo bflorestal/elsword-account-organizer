@@ -20,13 +20,9 @@ import { deleteAccountAction } from "~/server/actions/deleteAccount";
 
 interface DeleteAccountButtonProps {
   accountId: number;
-  accountUsername: string;
 }
 
-export function DeleteAccountButton({
-  accountId,
-  accountUsername,
-}: DeleteAccountButtonProps) {
+export function DeleteAccountButton({ accountId }: DeleteAccountButtonProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
@@ -71,8 +67,7 @@ export function DeleteAccountButton({
             Supprimer le compte
           </AlertDialogTitle>
           <AlertDialogDescription className="text-gray-400">
-            Êtes-vous sûr de vouloir supprimer le compte{" "}
-            <strong>{accountUsername}</strong> ?<br />
+            Êtes-vous sûr de vouloir supprimer ce compte ?<br />
             Les personnages associés seront également supprimés.
           </AlertDialogDescription>
         </AlertDialogHeader>

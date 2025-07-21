@@ -65,10 +65,7 @@ export default async function AccountPage({
               </div>
             </div>
           </div>
-          <DeleteAccountButton
-            accountId={parsedAccountId}
-            accountUsername={account.username}
-          />
+          <DeleteAccountButton accountId={parsedAccountId} />
         </div>
       </div>
 
