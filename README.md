@@ -14,8 +14,8 @@ Une application web pour ne plus perdre le fil de vos personnages Elsword : sach
 - **Runtime**: Bun
 - **Frontend**: Next.js 15
 - **Styling**: Tailwind CSS, Shadcn UI
-- **Base de données**: SQLite avec Drizzle ORM
-- **Déploiement**: Docker
+- **Base de données**: PostgreSQL avec Drizzle ORM
+- **Déploiement**: Docker Compose
 
 ## Prérequis
 
@@ -46,17 +46,23 @@ cp .env.example .env
 Puis modifiez le fichier `.env` avec vos variables d'environnement :
 
 ```env
-DB_FILE_NAME=database.db
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/elsword
 ```
 
-3. Configurez la base de données :
+3. Démarrez PostgreSQL via Docker Compose :
 
 ```bash
-# Génère les migrations
-bun run db:generate
+docker compose up db -d
+```
 
-# Applique les migrations
-bun run db:migrate
+4. Configurez la base de données :
+
+```bash
+# Synchronise le schéma avec la base de données
+bun run db:push
+
+# (Optionnel) Génère des migrations SQL
+bun run db:generate
 
 # Ajoute des données
 bun run db:seed
@@ -64,7 +70,7 @@ bun run db:seed
 
 ## Développement
 
-Pour lancer le serveur de développement :
+Pour lancer le serveur de développement (la base de données PostgreSQL doit être active) :
 
 ```bash
 bun --bun run dev
@@ -74,10 +80,15 @@ L'application sera disponible sur [http://localhost:3000](http://localhost:3000)
 
 ## Déploiement avec Docker
 
-1. Construisez l'image Docker avec Docker Compose :
+1. Démarrez l'application et la base de données avec Docker Compose :
 
 ```bash
 docker compose up --build
 ```
+
+Cette commande lance :
+
+- **PostgreSQL** sur le port `5432`
+- **l'application** sur le port `3000`
 
 L'application sera disponible sur [http://localhost:3000](http://localhost:3000).

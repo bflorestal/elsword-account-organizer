@@ -1,33 +1,12 @@
 {
   "version": "7",
-  "dialect": "sqlite",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "6",
-      "when": 1750543369983,
-      "tag": "0000_known_human_cannonball",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1752615725262,
-      "tag": "0001_ordinary_fantastic_four",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1752948463488,
-      "tag": "0002_eminent_nico_minoru",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1752951077923,
-      "tag": "0003_worthless_kate_bishop",
+      "version": "7",
+      "when": 1771520350490,
+      "tag": "0000_shocking_trish_tilby",
       "breakpoints": true
     }
   ]
