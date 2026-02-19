@@ -1,10 +1,16 @@
 import { relations } from "drizzle-orm";
-import { integer, sqliteTableCreator, text } from "drizzle-orm/sqlite-core";
+import {
+  boolean,
+  integer,
+  pgTableCreator,
+  serial,
+  text,
+} from "drizzle-orm/pg-core";
 
-export const createTable = sqliteTableCreator((name) => `elstracker_${name}`);
+export const createTable = pgTableCreator((name) => `elstracker_${name}`);
 
 export const servers = createTable("servers", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+  id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
 });
 
@@ -13,12 +19,12 @@ export const serversRelations = relations(servers, ({ many }) => ({
 }));
 
 export const accounts = createTable("accounts", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+  id: serial("id").primaryKey(),
   serverId: integer("server_id")
     .notNull()
     .references(() => servers.id, { onDelete: "cascade" }),
   username: text("username").notNull(),
-  isSteam: integer("is_steam", { mode: "boolean" }).default(false),
+  isSteam: boolean("is_steam").default(false),
   resonanceLevel: integer("resonance_level").default(0),
 });
 
@@ -31,7 +37,7 @@ export const accountsRelations = relations(accounts, ({ one, many }) => ({
 }));
 
 export const characters = createTable("characters", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+  id: serial("id").primaryKey(),
   accountId: integer("account_id")
     .notNull()
     .references(() => accounts.id, { onDelete: "cascade" }),
@@ -42,7 +48,7 @@ export const characters = createTable("characters", {
   level: integer("level").default(1),
   specializationId: integer("specialization_id").references(
     () => specializations.id,
-    { onDelete: "set null" }
+    { onDelete: "set null" },
   ),
   pvpRankId: integer("pvp_rank_id").references(() => pvpRanks.id, {
     onDelete: "set null",
@@ -69,7 +75,7 @@ export const charactersRelations = relations(characters, ({ one }) => ({
 }));
 
 export const classes = createTable("classes", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+  id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
   iconUrl: text("icon_url").notNull(),
 });
@@ -80,7 +86,7 @@ export const classesRelations = relations(classes, ({ many }) => ({
 }));
 
 export const specializations = createTable("specializations", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+  id: serial("id").primaryKey(),
   classId: integer("class_id")
     .notNull()
     .references(() => classes.id, { onDelete: "cascade" }),
@@ -96,7 +102,7 @@ export const specializationsRelations = relations(
       fields: [specializations.classId],
       references: [classes.id],
     }),
-  })
+  }),
 );
 
 export const pvpRanksEnum = [
@@ -113,7 +119,7 @@ export const pvpRanksEnum = [
 ] as const;
 
 export const pvpRanks = createTable("pvp_ranks", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+  id: serial("id").primaryKey(),
   name: text("name", { enum: pvpRanksEnum }).notNull().unique(),
   iconUrl: text("icon_url"),
 });
