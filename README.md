@@ -11,11 +11,11 @@ Une application web pour ne plus perdre le fil de vos personnages Elsword : sach
 
 ## Technologies utilisées
 
-- **Runtime**: Bun
-- **Frontend**: Next.js 15
-- **Styling**: Tailwind CSS, Shadcn UI
-- **Base de données**: PostgreSQL avec Drizzle ORM
-- **Déploiement**: Docker Compose
+- **Runtime** : Bun
+- **Frontend** : Next.js 16
+- **Styling** : Tailwind CSS, Shadcn UI
+- **Base de données** : PostgreSQL avec Drizzle ORM
+- **Déploiement** : Docker Compose
 
 ## Prérequis
 
