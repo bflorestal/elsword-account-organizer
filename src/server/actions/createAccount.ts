@@ -12,7 +12,7 @@ export async function createAccountAction(data: typeof accounts.$inferInsert) {
       throw new Error("Failed to create account");
     }
 
-    revalidatePath("/");
+    revalidatePath("/", "layout");
 
     return { success: true, data: newAccount };
   } catch (error) {

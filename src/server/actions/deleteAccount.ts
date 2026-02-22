@@ -11,7 +11,7 @@ export async function deleteAccountAction(accountId: number) {
       throw new Error("Failed to delete account");
     }
 
-    revalidatePath("/");
+    revalidatePath("/", "layout");
 
     return { success: true, data: deletedAccount };
   } catch (error) {
