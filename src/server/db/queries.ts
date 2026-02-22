@@ -72,9 +72,7 @@ export async function getAccountById(accountId: number) {
     },
   });
 
-  if (!account) throw new Error(`Account with ID ${accountId} not found`);
-
-  return account;
+  return account ?? null;
 }
 
 export async function updateAccount(
@@ -146,9 +144,7 @@ export async function getCharacterById(characterId: number) {
     },
   });
 
-  if (!character) throw new Error(`Character with ID ${characterId} not found`);
-
-  return character;
+  return character ?? null;
 }
 
 export async function updateCharacter(

@@ -22,13 +22,12 @@ export default async function AccountPage({
   params: Promise<{ id: string }>;
 }) {
   const { id: accountId } = await params;
-  const parsedAccountId = parseInt(accountId);
+  const idAsNumber = parseInt(accountId);
 
-  if (isNaN(parsedAccountId)) {
-    notFound();
-  }
+  if (isNaN(idAsNumber)) notFound();
 
-  const account = await getAccountById(parsedAccountId);
+  const account = await getAccountById(idAsNumber);
+  if (!account) notFound();
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -76,7 +75,7 @@ export default async function AccountPage({
           </div>
         </div>
 
-        <DeleteAccountButton accountId={parsedAccountId} />
+        <DeleteAccountButton accountId={idAsNumber} />
       </div>
 
       <div
@@ -109,7 +108,7 @@ export default async function AccountPage({
               </button>
             }
           >
-            <NewCharacterButton accountId={parsedAccountId} />
+            <NewCharacterButton accountId={idAsNumber} />
           </Suspense>
         </div>
 

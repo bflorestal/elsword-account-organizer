@@ -13,13 +13,12 @@ export default async function CharacterPage({
   params: Promise<{ id: string }>;
 }) {
   const { id: characterId } = await params;
-  const parsedCharacterId = parseInt(characterId);
+  const idAsNumber = parseInt(characterId);
 
-  if (isNaN(parsedCharacterId)) {
-    notFound();
-  }
+  if (isNaN(idAsNumber)) notFound();
 
-  const character = await getCharacterById(parsedCharacterId);
+  const character = await getCharacterById(idAsNumber);
+  if (!character) notFound();
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -98,7 +97,7 @@ export default async function CharacterPage({
             </div>
 
             <DeleteCharacterButton
-              characterId={parsedCharacterId}
+              characterId={idAsNumber}
               accountId={character.accountId}
             />
           </div>
