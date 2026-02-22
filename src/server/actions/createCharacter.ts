@@ -6,7 +6,7 @@ import { createCharacter } from "~/server/db/queries";
 import { characters } from "~/server/db/schema";
 
 export async function createCharacterAction(
-  data: typeof characters.$inferInsert
+  data: typeof characters.$inferInsert,
 ) {
   try {
     const newCharacter = await createCharacter(data);
@@ -14,7 +14,7 @@ export async function createCharacterAction(
       throw new Error("Failed to create character");
     }
 
-    revalidatePath(`/account/${data.accountId}`);
+    revalidatePath("/", "layout");
 
     return { success: true, data: newCharacter };
   } catch (error) {
