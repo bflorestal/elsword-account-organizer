@@ -18,26 +18,20 @@ import {
 import { Trash2 } from "lucide-react";
 import { deleteAccountAction } from "~/server/actions/deleteAccount";
 
-interface DeleteAccountButtonProps {
-  accountId: number;
-}
-
-export function DeleteAccountButton({ accountId }: DeleteAccountButtonProps) {
+export function DeleteAccountButton({ accountId }: { accountId: number }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
-
     try {
       const result = await deleteAccountAction(accountId);
-
       if (result.success) {
         toast.success("Compte supprimé avec succès");
         router.push("/");
       } else {
         toast.error(
-          result.error?.message || "Erreur lors de la suppression du compte"
+          result.error?.message || "Erreur lors de la suppression du compte",
         );
       }
     } catch (error) {
@@ -61,18 +55,16 @@ export function DeleteAccountButton({ accountId }: DeleteAccountButtonProps) {
           Supprimer le compte
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="">
+      <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-white">
-            Supprimer le compte
-          </AlertDialogTitle>
-          <AlertDialogDescription className="text-gray-400">
+          <AlertDialogTitle>Supprimer le compte</AlertDialogTitle>
+          <AlertDialogDescription>
             Êtes-vous sûr de vouloir supprimer ce compte ?<br />
             Les personnages associés seront également supprimés.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="bg-gray-700 text-white hover:bg-gray-600 cursor-pointer">
+          <AlertDialogCancel className="cursor-pointer">
             Annuler
           </AlertDialogCancel>
           <AlertDialogAction asChild>

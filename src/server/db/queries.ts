@@ -49,7 +49,7 @@ export async function createAccount(data: typeof accounts.$inferInsert) {
   const existingAccount = await db.query.accounts.findFirst({
     where: and(
       eq(accounts.username, data.username),
-      eq(accounts.serverId, data.serverId)
+      eq(accounts.serverId, data.serverId),
     ),
   });
 
@@ -72,14 +72,12 @@ export async function getAccountById(accountId: number) {
     },
   });
 
-  if (!account) throw new Error(`Account with ID ${accountId} not found`);
-
-  return account;
+  return account ?? null;
 }
 
 export async function updateAccount(
   accountId: number,
-  data: Partial<typeof accounts.$inferInsert>
+  data: Partial<typeof accounts.$inferInsert>,
 ) {
   const account = await db.query.accounts.findFirst({
     where: eq(accounts.id, accountId),
@@ -134,17 +132,24 @@ export async function createCharacter(data: typeof characters.$inferInsert) {
 export async function getCharacterById(characterId: number) {
   const character = await db.query.characters.findFirst({
     where: eq(characters.id, characterId),
-    with: fullCharacterFields,
+    with: {
+      class: true,
+      specialization: true,
+      pvpRank: true,
+      account: {
+        with: {
+          server: true,
+        },
+      },
+    },
   });
 
-  if (!character) throw new Error(`Character with ID ${characterId} not found`);
-
-  return character;
+  return character ?? null;
 }
 
 export async function updateCharacter(
   characterId: number,
-  data: Partial<typeof characters.$inferInsert>
+  data: Partial<typeof characters.$inferInsert>,
 ) {
   const character = await db.query.characters.findFirst({
     where: eq(characters.id, characterId),

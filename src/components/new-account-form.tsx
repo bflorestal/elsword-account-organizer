@@ -107,7 +107,7 @@ export function NewAccountForm({
           <Plus className="mr-2 h-4 w-4" /> Ajouter un compte
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
           <DialogTitle>Ajouter un compte</DialogTitle>
           <DialogDescription>

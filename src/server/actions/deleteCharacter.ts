@@ -11,7 +11,7 @@ export async function deleteCharacterAction(characterId: number) {
       throw new Error("Failed to delete character");
     }
 
-    revalidatePath(`/account/${deletedCharacter.accountId}`);
+    revalidatePath("/", "layout");
 
     return { success: true, data: deletedCharacter };
   } catch (error) {

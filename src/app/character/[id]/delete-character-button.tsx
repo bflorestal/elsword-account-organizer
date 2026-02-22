@@ -18,30 +18,27 @@ import {
 import { Trash2 } from "lucide-react";
 import { deleteCharacterAction } from "~/server/actions/deleteCharacter";
 
-interface DeleteCharacterButtonProps {
-  characterId: number;
-  accountId: number;
-}
-
 export function DeleteCharacterButton({
   characterId,
   accountId,
-}: DeleteCharacterButtonProps) {
+}: {
+  characterId: number;
+  accountId: number;
+}) {
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
   const handleDeleteCharacter = async () => {
     setIsDeleting(true);
-
     try {
       const result = await deleteCharacterAction(characterId);
-
       if (result.success) {
         toast.success("Personnage supprimé avec succès");
         router.push(`/account/${accountId}`);
       } else {
         toast.error(
-          result.error?.message || "Erreur lors de la suppression du personnage"
+          result.error?.message ||
+            "Erreur lors de la suppression du personnage",
         );
       }
     } catch (error) {
@@ -65,18 +62,16 @@ export function DeleteCharacterButton({
           Supprimer le personnage
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="">
+      <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-white">
-            Supprimer le personnage
-          </AlertDialogTitle>
-          <AlertDialogDescription className="text-gray-400">
+          <AlertDialogTitle>Supprimer le personnage</AlertDialogTitle>
+          <AlertDialogDescription>
             Êtes-vous sûr de vouloir supprimer le personnage ?<br />
             Cette action est irréversible.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="bg-gray-700 text-white hover:bg-gray-600 cursor-pointer">
+          <AlertDialogCancel className="cursor-pointer">
             Annuler
           </AlertDialogCancel>
           <AlertDialogAction asChild>
